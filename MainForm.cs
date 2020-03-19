@@ -13,6 +13,45 @@ namespace MathematicalSetViewer
 {
     public partial class MainForm : Form
     {
+
+        // TODO: REMOVE TEMPORARY SOLUTIONS
+        public int TempZoomSpeed { get; private set; }
+
+        public bool TempMovementUp { get; private set; }
+
+        public bool TempMovementDown { get; private set; }
+
+        public bool TempMovementLeft { get; private set; }
+
+        public bool TempMovementRight { get; private set; }
+
+        public bool TempPause { get; private set; }
+
+        private bool _MenuVisible = true;
+        /// <summary>
+        /// The MenuVisibility variable. When the value is set, it will update the MainMenu visibility.
+        /// </summary>
+        public bool TempMenuVisible
+        {
+            get { return _MenuVisible; }
+            set
+            {
+                // TODO: is checking to ensure the value has changed before attempting visibility change worthwhile?
+                _MenuVisible = value;
+                try
+                {
+                    this.MainMenuStrip.Visible = _MenuVisible;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                    Debug.WriteLine("ERROR CAUGHT WHEN UPDATING MENU VISIBILITY?");
+                }
+            }
+        }
+
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -24,6 +63,7 @@ namespace MathematicalSetViewer
         /// <param name="isVisible">False to hide, true to show</param>
         private void MenuBarVisibility(bool isVisible)
         {
+            TempMenuVisible = isVisible;
             this.MainFormMainMenuStrip.Visible = isVisible;
             this.MinimizeButton.Visible = isVisible;
             this.ExitButton.Visible = isVisible;
@@ -35,6 +75,7 @@ namespace MathematicalSetViewer
         /// <param name="isMovement">False to disable display movement, true to enable display movement</param>
         private void DisplayMovement(bool isMovement)
         {
+            TempPause = isMovement;
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -177,6 +218,7 @@ namespace MathematicalSetViewer
         private void ViewHideMenu_Click(object sender, EventArgs e)
         {
             MenuBarVisibility(false);
+            updateText();
         }
 
         /// <summary>
@@ -188,11 +230,123 @@ namespace MathematicalSetViewer
         {
             MenuBarVisibility(false);
             DisplayMovement(true);
+            updateText();
         }
-      
 
-        private void ViewResume_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// Handles key presses such as directional panning 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
         {
+            switch (e.KeyChar)
+            {
+                case ' ':
+                    // TODO: pause on space
+                    DisplayMovement(!TempPause);
+                    break;
+                case '\u001b':
+                    // TODO: unhide menu on escape                    
+                    if (TempMenuVisible)
+                    {
+                        MenuBarVisibility(false);
+                    } else
+                    {
+                        MenuBarVisibility(true);
+                    }
+                    break;
+
+            }
+            updateText();
+
+
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.W:
+                    TempMovementUp = true;
+                    break;
+
+                case Keys.Down:
+                case Keys.S:
+                    TempMovementDown = true;
+                    break;
+
+                case Keys.Left:
+                case Keys.A:
+                    TempMovementLeft = true;
+                    break;
+
+                case Keys.Right:
+                case Keys.D:
+                    TempMovementRight = true;
+                    break;
+            }
+            updateText();
+        }
+
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.W:
+                    TempMovementUp = false;
+                    break;
+
+                case Keys.Down:
+                case Keys.S:
+                    TempMovementDown = false;
+                    break;
+
+                case Keys.Left:
+                case Keys.A:
+                    TempMovementLeft = false;
+                    break;
+
+                case Keys.Right:
+                case Keys.D:
+                    TempMovementRight = false;
+                    break;
+            }
+            updateText();
+        }
+
+        private void MainForm_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                // Mouse wheel up
+                ++TempZoomSpeed;
+            }
+            else
+            {
+                // Mouse wheel down
+                --TempZoomSpeed;
+            }
+            updateText();
+        }
+
+        private void updateText()
+        {
+            Point p = this.PointToClient(System.Windows.Forms.Cursor.Position);
+            Point c = Cursor.Position;
+            Debug.Print(string.Format("<{0,4},{1,4}>|<{2,4},{3,4}> {4}{5}{6}{7} {8}{9} {10,3}",
+                p.X.ToString(), p.Y.ToString(),
+                c.X.ToString(), c.Y.ToString(),
+                (TempMovementUp ? "↑" : " "),
+                (TempMovementDown ? "↓" : " "),
+                (TempMovementLeft ? "←" : " "),
+                (TempMovementRight ? "→" : " "),
+                (TempPause ? "P" : " "),
+                (TempMenuVisible ? "M" : " "),
+                TempZoomSpeed.ToString()));
 
         }
     }
