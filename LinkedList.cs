@@ -106,14 +106,6 @@ namespace MathematicalSetViewer
             LinkedListNode current = head;
             while (current != null)
             {
-                /*try
-                {
-                    total += current.Value;
-                } catch (Exception e)
-                {
-                    //total = null;
-                }*/
-                
                 LinkedListNode temp = current;
                 current = current.Next;   // use Next the instead of "next", otherwise it will loop forever
                 temp.Invalidate();
