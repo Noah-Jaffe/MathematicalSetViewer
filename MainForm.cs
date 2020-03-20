@@ -1,69 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MathematicalSetViewer
 {
+
     public partial class MainForm : Form
     {
-
-        // TODO: REMOVE TEMPORARY SOLUTIONS
-        public int TempZoomSpeed { get; private set; }
-
-        public bool TempMovementUp { get; private set; }
-
-        public bool TempMovementDown { get; private set; }
-
-        public bool TempMovementLeft { get; private set; }
-
-        public bool TempMovementRight { get; private set; }
-
-        public bool TempPause { get; private set; }
-
-        private bool _MenuVisible = true;
-        /// <summary>
-        /// The MenuVisibility variable. When the value is set, it will update the MainMenu visibility.
-        /// </summary>
-        public bool TempMenuVisible
-        {
-            get { return _MenuVisible; }
-            set
-            {
-                // TODO: is checking to ensure the value has changed before attempting visibility change worthwhile?
-                _MenuVisible = value;
-                try
-                {
-                    this.MainMenuStrip.Visible = _MenuVisible;
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                    Debug.WriteLine("ERROR CAUGHT WHEN UPDATING MENU VISIBILITY?");
-                }
-            }
-        }
-
-
-
+        
         public MainForm()
         {
             InitializeComponent();
         }
 
         /// <summary>
-        /// Toggles the visibility for the menu bar, and the minimize/exit buttons.
+        /// Toggles the visibility for the menu bar, and all the minimize/exit buttons.
+        /// TODO: should i change to UpdateAllGUIVisibility?
         /// </summary>
         /// <param name="isVisible">False to hide, true to show</param>
-        private void MenuBarVisibility(bool isVisible)
+        private void UpdateMenuBarVisibility(bool isVisible)
         {
-            TempMenuVisible = isVisible;
+            MSVData.MenuVisible = isVisible;
             this.MainFormMainMenuStrip.Visible = isVisible;
             this.MinimizeButton.Visible = isVisible;
             this.ExitButton.Visible = isVisible;
@@ -72,11 +33,10 @@ namespace MathematicalSetViewer
         /// <summary>
         /// A toggle for the display movement. 
         /// </summary>
-        /// <param name="isMovement">False to disable display movement, true to enable display movement</param>
-        private void DisplayMovement(bool isMovement)
+        /// <param name="isEnabled">False to disable display movement, true to enable display movement</param>
+        private void UpdateRenderEnabled(bool isEnabled)
         {
-            TempPause = isMovement;
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            MSVData.RenderEnabled = isEnabled;
         }
 
         /// <summary>
@@ -95,9 +55,12 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ControlsInput_Click(object sender, EventArgs e)
+        private void ControlsInput_CheckedChanged(object sender, EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            var Item = sender as ToolStripMenuItem;
+            MSVData.RenderEnabled = Item.Checked;
+            updateText();
+            Debug.Print(this.Text);
         }
 
         /// <summary>
@@ -109,8 +72,10 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ControlsSmoothAcceleration_Click(object sender, EventArgs e)
+        private void ControlsSmoothAcceleration_CheckedChanged(object sender, EventArgs e)
         {
+
+            // MSVData.SmoothAccelerationEnabled = 
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -121,7 +86,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ZoomSpeedNone_Click(object sender, EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            MSVData._ZoomSpeed = 0;
         }
 
         /// <summary>
@@ -129,9 +94,10 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ControlsPause_Click(object sender, EventArgs e)
+        private void ControlsPause_CheckedChanged(object sender, EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            var Item = sender as ToolStripMenuItem;
+            MSVData.RenderEnabled = Item.Checked;
         }
 
         /// <summary>
@@ -149,29 +115,26 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ColorSettingsFullColor_Click(object sender, EventArgs e)
+        private void ColorSettings_CheckedChanged(object sender, EventArgs e)
         {
+            // set the sender to checked, and set the other ones to unchecked
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
         /// <summary>
-        /// Sets the active color pallet an 8-bit set of colors.
+        /// Updates the mathematical set to be used, acts like a radio button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ColorSettings8Bit_Click(object sender, EventArgs e)
+        private void MathematicalSet_UpdateSet(object sender, EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
-        }
-
-        /// <summary>
-        /// Opens a window for the user to create their own list of colors.
-        /// Updates the active color pallet to the user defined list.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ColorSettingsCustom_Click(object sender, EventArgs e)
-        {
+            var item = sender as ToolStripMenuItem;
+            // TODO: figure out how to toggle all but the sender in this group
+            foreach (var I in item.DropDownItems.OfType<ToolStripMenuItem>().ToList())
+            {
+                Debug.Print(I.Name);
+            }
+            // set the sender to checked, and set the other ones to unchecked
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -196,7 +159,10 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void MinimizeButton_Click(object sender, System.EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            if (this.ViewPauseWhenMinimized.Checked)
+            {
+                MSVData.RenderEnabled = false;
+            }
         }
 
         /// <summary>
@@ -209,7 +175,6 @@ namespace MathematicalSetViewer
             CloseApplication();
         }
 
-
         /// <summary>
         /// Hides the menu bar
         /// </summary>
@@ -217,7 +182,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ViewHideMenu_Click(object sender, EventArgs e)
         {
-            MenuBarVisibility(false);
+            UpdateMenuBarVisibility(false);
             updateText();
         }
 
@@ -228,11 +193,10 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ViewHideMenuAndResume_Click(object sender, EventArgs e)
         {
-            MenuBarVisibility(false);
-            DisplayMovement(true);
+            UpdateMenuBarVisibility(false);
+            UpdateRenderEnabled(true);
             updateText();
         }
-
 
         /// <summary>
         /// Handles key presses such as directional panning 
@@ -245,16 +209,16 @@ namespace MathematicalSetViewer
             {
                 case ' ':
                     // TODO: pause on space
-                    DisplayMovement(!TempPause);
+                    UpdateRenderEnabled(!MSVData.RenderEnabled);
                     break;
                 case '\u001b':
                     // TODO: unhide menu on escape                    
-                    if (TempMenuVisible)
+                    if (MSVData.MenuVisible)
                     {
-                        MenuBarVisibility(false);
+                        UpdateMenuBarVisibility(false);
                     } else
                     {
-                        MenuBarVisibility(true);
+                        UpdateMenuBarVisibility(true);
                     }
                     break;
 
@@ -263,72 +227,75 @@ namespace MathematicalSetViewer
 
 
         }
-
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Up:
                 case Keys.W:
-                    TempMovementUp = true;
+                    MSVData.MovementUp = true;
                     break;
 
                 case Keys.Down:
                 case Keys.S:
-                    TempMovementDown = true;
+                    MSVData.MovementDown = true;
                     break;
 
                 case Keys.Left:
                 case Keys.A:
-                    TempMovementLeft = true;
+                    MSVData.MovementLeft = true;
                     break;
 
                 case Keys.Right:
                 case Keys.D:
-                    TempMovementRight = true;
+                    MSVData.MovementRight = true;
                     break;
             }
             updateText();
         }
-
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Up:
                 case Keys.W:
-                    TempMovementUp = false;
+                    MSVData.MovementUp = false;
                     break;
 
                 case Keys.Down:
                 case Keys.S:
-                    TempMovementDown = false;
+                    MSVData.MovementDown = false;
                     break;
 
                 case Keys.Left:
                 case Keys.A:
-                    TempMovementLeft = false;
+                    MSVData.MovementLeft = false;
                     break;
 
                 case Keys.Right:
                 case Keys.D:
-                    TempMovementRight = false;
+                    MSVData.MovementRight = false;
                     break;
             }
             updateText();
         }
-
+        
+        /// <summary>
+        /// Handles the zoom controls
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
             {
                 // Mouse wheel up
-                ++TempZoomSpeed;
+                MSVData.ZoomSpeed = 1;
             }
             else
             {
                 // Mouse wheel down
-                --TempZoomSpeed;
+                MSVData.ZoomSpeed = -1;
             }
             updateText();
         }
@@ -340,13 +307,13 @@ namespace MathematicalSetViewer
             Debug.Print(string.Format("<{0,4},{1,4}>|<{2,4},{3,4}> {4}{5}{6}{7} {8}{9} {10,3}",
                 p.X.ToString(), p.Y.ToString(),
                 c.X.ToString(), c.Y.ToString(),
-                (TempMovementUp ? "↑" : " "),
-                (TempMovementDown ? "↓" : " "),
-                (TempMovementLeft ? "←" : " "),
-                (TempMovementRight ? "→" : " "),
-                (TempPause ? "P" : " "),
-                (TempMenuVisible ? "M" : " "),
-                TempZoomSpeed.ToString()));
+                (MSVData.MovementUp ? "↑" : " "),
+                (MSVData.MovementDown ? "↓" : " "),
+                (MSVData.MovementLeft ? "←" : " "),
+                (MSVData.MovementRight ? "→" : " "),
+                (MSVData.RenderEnabled ? "P" : " "),
+                (MSVData.MenuVisible ? "M" : " "),
+                MSVData.ZoomSpeed.ToString()));
 
         }
     }

@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTests.cs" />
+    <Compile Include="LinkedList.cs" />
+    <Compile Include="MSVData.cs" />
     <Compile Include="XY.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

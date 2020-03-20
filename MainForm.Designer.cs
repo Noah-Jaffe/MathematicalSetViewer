@@ -77,23 +77,25 @@
             // 
             // ControlsPause
             // 
-            this.ControlsPause.Checked = true;
-            this.ControlsPause.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ControlsPause.CheckOnClick = true;
+            this.ControlsInput.Checked = true;
+            this.ControlsInput.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ControlsPause.Name = "ControlsPause";
             this.ControlsPause.Size = new System.Drawing.Size(183, 22);
             this.ControlsPause.Text = "Pause";
             this.ControlsPause.ToolTipText = "Pauses the screen";
-            this.ControlsPause.Click += new System.EventHandler(this.ControlsPause_Click);
+            this.ControlsPause.CheckedChanged += ControlsPause_CheckedChanged;
             // 
             // ControlsInput
             // 
+            this.ControlsInput.CheckOnClick = true;
             this.ControlsInput.Checked = true;
             this.ControlsInput.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ControlsInput.Name = "ControlsInput";
             this.ControlsInput.Size = new System.Drawing.Size(183, 22);
             this.ControlsInput.Text = "Input";
             this.ControlsInput.ToolTipText = "Enables/Disables input from keyboard";
-            this.ControlsInput.Click += new System.EventHandler(this.ControlsInput_Click);
+            this.ControlsInput.CheckedChanged += ControlsInput_CheckedChanged;
             // 
             // toolStripSeparator1
             // 
@@ -131,13 +133,12 @@
             // 
             // ControlsSmoothAcceleration
             // 
-            this.ControlsSmoothAcceleration.Checked = true;
-            this.ControlsSmoothAcceleration.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ControlsSmoothAcceleration.CheckOnClick = true;
             this.ControlsSmoothAcceleration.Name = "ControlsSmoothAcceleration";
             this.ControlsSmoothAcceleration.Size = new System.Drawing.Size(183, 22);
             this.ControlsSmoothAcceleration.Text = "Smooth acceleration";
             this.ControlsSmoothAcceleration.ToolTipText = "Accelerate smoothly or iteratively";
-            this.ControlsSmoothAcceleration.Click += new System.EventHandler(this.ControlsSmoothAcceleration_Click);
+            this.ControlsSmoothAcceleration.CheckedChanged += this.ControlsSmoothAcceleration_CheckedChanged;
             // 
             // toolStripSeparator2
             // 
@@ -156,26 +157,27 @@
             // 
             // ColorSettingsAll
             // 
+            this.ColorSettingsAll.CheckOnClick = true;
             this.ColorSettingsAll.Checked = true;
             this.ColorSettingsAll.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ColorSettingsAll.Name = "ColorSettingsAll";
             this.ColorSettingsAll.Size = new System.Drawing.Size(139, 22);
             this.ColorSettingsAll.Text = "Full rainbow";
-            this.ColorSettingsAll.Click += new System.EventHandler(this.ColorSettingsFullColor_Click);
+            this.ColorSettingsAll.CheckedChanged += this.ColorSettings_CheckedChanged;
             // 
             // ColorSettings8Bit
             // 
             this.ColorSettings8Bit.Name = "ColorSettings8Bit";
             this.ColorSettings8Bit.Size = new System.Drawing.Size(139, 22);
             this.ColorSettings8Bit.Text = "8-bit";
-            this.ColorSettings8Bit.Click += new System.EventHandler(this.ColorSettings8Bit_Click);
+            this.ColorSettings8Bit.CheckedChanged += this.ColorSettings_CheckedChanged;
             // 
             // ColorSettingsCustom
             // 
             this.ColorSettingsCustom.Name = "ColorSettingsCustom";
             this.ColorSettingsCustom.Size = new System.Drawing.Size(139, 22);
             this.ColorSettingsCustom.Text = "Custom";
-            this.ColorSettingsCustom.Click += new System.EventHandler(this.ColorSettingsCustom_Click);
+            this.ColorSettingsCustom.CheckedChanged += this.ColorSettings_CheckedChanged;
             // 
             // MathematicalSetMenuTSMI
             // 
@@ -189,23 +191,31 @@
             // 
             // MathematicalSetMandelbrot
             // 
+            this.MathematicalSetMandelbrot.CheckOnClick = true;
             this.MathematicalSetMandelbrot.Checked = true;
             this.MathematicalSetMandelbrot.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MathematicalSetMandelbrot.Name = "MathematicalSetMandelbrot";
             this.MathematicalSetMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetMandelbrot.Text = "Mandelbrot";
+            this.MathematicalSetMandelbrot.CheckedChanged += MathematicalSet_UpdateSet;
             // 
             // MathematicalSetInverseMandelbrot
             // 
+            this.MathematicalSetInverseMandelbrot.CheckOnClick = true;
             this.MathematicalSetInverseMandelbrot.Name = "MathematicalSetInverseMandelbrot";
             this.MathematicalSetInverseMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetInverseMandelbrot.Text = "Inverse Mandelbrot";
+            this.MathematicalSetInverseMandelbrot.CheckedChanged += MathematicalSet_UpdateSet;
+
             // 
             // MathematicalSetJuliaSet
             // 
+            this.MathematicalSetJuliaSet.CheckOnClick = true;
             this.MathematicalSetJuliaSet.Name = "MathematicalSetJuliaSet";
             this.MathematicalSetJuliaSet.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetJuliaSet.Text = "Julia Set";
+            this.MathematicalSetJuliaSet.CheckedChanged += MathematicalSet_UpdateSet;
+
             // 
             // ViewMenuTSMI
             // 
@@ -240,6 +250,7 @@
             // 
             // ViewPauseWhenMinimized
             // 
+            this.ViewPauseWhenMinimized.CheckOnClick = true;
             this.ViewPauseWhenMinimized.Checked = true;
             this.ViewPauseWhenMinimized.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ViewPauseWhenMinimized.Name = "ViewPauseWhenMinimized";
@@ -321,11 +332,11 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Mathematical Set Viewer";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            // this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
-            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseWheel);
+            this.MouseWheel += this.MainForm_MouseWheel;
             this.MainFormMainMenuStrip.ResumeLayout(false);
             this.MainFormMainMenuStrip.PerformLayout();
             this.ResumeLayout(false);
