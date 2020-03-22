@@ -43,7 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTests.cs" />
+    <Compile Include="ColorPaletteGenerator.cs" />
+    <Compile Include="CustomDecimalInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomDecimalInputForm.Designer.cs">
+      <DependentUpon>CustomDecimalInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="LinkedList.cs" />
     <Compile Include="MSVData.cs" />
     <Compile Include="XY.cs" />
@@ -56,6 +62,9 @@
     <Compile Include="MathematicalSet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CustomDecimalInputForm.resx">
+      <DependentUpon>CustomDecimalInputForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -68,6 +77,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

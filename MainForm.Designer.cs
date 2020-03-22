@@ -39,8 +39,7 @@
             this.ControlsSmoothAcceleration = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.ControlsColorSettingsMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColorSettingsAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.ColorSettings8Bit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ColorSettingOptions = new System.Windows.Forms.ToolStripComboBox();
             this.ColorSettingsCustom = new System.Windows.Forms.ToolStripMenuItem();
             this.MathematicalSetMenuTSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.MathematicalSetMandelbrot = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,24 +77,20 @@
             // ControlsPause
             // 
             this.ControlsPause.CheckOnClick = true;
-            this.ControlsInput.Checked = true;
-            this.ControlsInput.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ControlsPause.Name = "ControlsPause";
             this.ControlsPause.Size = new System.Drawing.Size(183, 22);
             this.ControlsPause.Text = "Pause";
             this.ControlsPause.ToolTipText = "Pauses the screen";
-            this.ControlsPause.CheckedChanged += ControlsPause_CheckedChanged;
             // 
             // ControlsInput
             // 
-            this.ControlsInput.CheckOnClick = true;
             this.ControlsInput.Checked = true;
+            this.ControlsInput.CheckOnClick = true;
             this.ControlsInput.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ControlsInput.Name = "ControlsInput";
             this.ControlsInput.Size = new System.Drawing.Size(183, 22);
             this.ControlsInput.Text = "Input";
             this.ControlsInput.ToolTipText = "Enables/Disables input from keyboard";
-            this.ControlsInput.CheckedChanged += ControlsInput_CheckedChanged;
             // 
             // toolStripSeparator1
             // 
@@ -138,7 +133,6 @@
             this.ControlsSmoothAcceleration.Size = new System.Drawing.Size(183, 22);
             this.ControlsSmoothAcceleration.Text = "Smooth acceleration";
             this.ControlsSmoothAcceleration.ToolTipText = "Accelerate smoothly or iteratively";
-            this.ControlsSmoothAcceleration.CheckedChanged += this.ControlsSmoothAcceleration_CheckedChanged;
             // 
             // toolStripSeparator2
             // 
@@ -148,36 +142,30 @@
             // ControlsColorSettingsMenu
             // 
             this.ControlsColorSettingsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ColorSettingsAll,
-            this.ColorSettings8Bit,
+            this.ColorSettingOptions,
             this.ColorSettingsCustom});
             this.ControlsColorSettingsMenu.Name = "ControlsColorSettingsMenu";
             this.ControlsColorSettingsMenu.Size = new System.Drawing.Size(183, 22);
             this.ControlsColorSettingsMenu.Text = "Color settings";
             // 
-            // ColorSettingsAll
+            // ColorSettingOptions
             // 
-            this.ColorSettingsAll.CheckOnClick = true;
-            this.ColorSettingsAll.Checked = true;
-            this.ColorSettingsAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ColorSettingsAll.Name = "ColorSettingsAll";
-            this.ColorSettingsAll.Size = new System.Drawing.Size(139, 22);
-            this.ColorSettingsAll.Text = "Full rainbow";
-            this.ColorSettingsAll.CheckedChanged += this.ColorSettings_CheckedChanged;
-            // 
-            // ColorSettings8Bit
-            // 
-            this.ColorSettings8Bit.Name = "ColorSettings8Bit";
-            this.ColorSettings8Bit.Size = new System.Drawing.Size(139, 22);
-            this.ColorSettings8Bit.Text = "8-bit";
-            this.ColorSettings8Bit.CheckedChanged += this.ColorSettings_CheckedChanged;
+            this.ColorSettingOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ColorSettingOptions.Items.AddRange(new object[] {
+            "Full Color",
+            "8-bit",
+            "todo:custom"});
+            this.ColorSettingOptions.Name = "ColorSettingOptions";
+            this.ColorSettingOptions.Size = new System.Drawing.Size(121, 23);
+            this.ColorSettingOptions.Text = "Full Color";
+            this.ColorSettingOptions.SelectedIndexChanged += new System.EventHandler(this.ControlsColorSettingChanged);
             // 
             // ColorSettingsCustom
             // 
             this.ColorSettingsCustom.Name = "ColorSettingsCustom";
-            this.ColorSettingsCustom.Size = new System.Drawing.Size(139, 22);
+            this.ColorSettingsCustom.Size = new System.Drawing.Size(181, 22);
             this.ColorSettingsCustom.Text = "Custom";
-            this.ColorSettingsCustom.CheckedChanged += this.ColorSettings_CheckedChanged;
+            this.ColorSettingsCustom.CheckStateChanged += new System.EventHandler(this.ColorSettings_CheckedChanged);
             // 
             // MathematicalSetMenuTSMI
             // 
@@ -191,13 +179,12 @@
             // 
             // MathematicalSetMandelbrot
             // 
-            this.MathematicalSetMandelbrot.CheckOnClick = true;
             this.MathematicalSetMandelbrot.Checked = true;
+            this.MathematicalSetMandelbrot.CheckOnClick = true;
             this.MathematicalSetMandelbrot.CheckState = System.Windows.Forms.CheckState.Checked;
             this.MathematicalSetMandelbrot.Name = "MathematicalSetMandelbrot";
             this.MathematicalSetMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetMandelbrot.Text = "Mandelbrot";
-            this.MathematicalSetMandelbrot.CheckedChanged += MathematicalSet_UpdateSet;
             // 
             // MathematicalSetInverseMandelbrot
             // 
@@ -205,8 +192,6 @@
             this.MathematicalSetInverseMandelbrot.Name = "MathematicalSetInverseMandelbrot";
             this.MathematicalSetInverseMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetInverseMandelbrot.Text = "Inverse Mandelbrot";
-            this.MathematicalSetInverseMandelbrot.CheckedChanged += MathematicalSet_UpdateSet;
-
             // 
             // MathematicalSetJuliaSet
             // 
@@ -214,8 +199,6 @@
             this.MathematicalSetJuliaSet.Name = "MathematicalSetJuliaSet";
             this.MathematicalSetJuliaSet.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetJuliaSet.Text = "Julia Set";
-            this.MathematicalSetJuliaSet.CheckedChanged += MathematicalSet_UpdateSet;
-
             // 
             // ViewMenuTSMI
             // 
@@ -250,8 +233,8 @@
             // 
             // ViewPauseWhenMinimized
             // 
-            this.ViewPauseWhenMinimized.CheckOnClick = true;
             this.ViewPauseWhenMinimized.Checked = true;
+            this.ViewPauseWhenMinimized.CheckOnClick = true;
             this.ViewPauseWhenMinimized.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ViewPauseWhenMinimized.Name = "ViewPauseWhenMinimized";
             this.ViewPauseWhenMinimized.Size = new System.Drawing.Size(198, 22);
@@ -332,11 +315,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Mathematical Set Viewer";
-            // this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
-            this.MouseWheel += this.MainForm_MouseWheel;
             this.MainFormMainMenuStrip.ResumeLayout(false);
             this.MainFormMainMenuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -351,11 +332,10 @@
         private System.Windows.Forms.ToolStripMenuItem ControlsInput;
         private System.Windows.Forms.ToolStripMenuItem ControlsZoomSpeedMenu;
         private System.Windows.Forms.ToolStripMenuItem ZoomSpeedNone;
+        private System.Windows.Forms.ToolStripMenuItem ZoomSpeedCustom;
         private System.Windows.Forms.ToolStripMenuItem ControlsPanSpeed;
         private System.Windows.Forms.ToolStripMenuItem ControlsSmoothAcceleration;
         private System.Windows.Forms.ToolStripMenuItem ControlsColorSettingsMenu;
-        private System.Windows.Forms.ToolStripMenuItem ColorSettingsAll;
-        private System.Windows.Forms.ToolStripMenuItem ColorSettings8Bit;
         private System.Windows.Forms.ToolStripMenuItem ColorSettingsCustom;
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetMenuTSMI;
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetMandelbrot;
@@ -367,7 +347,6 @@
         private System.Windows.Forms.ToolStripMenuItem ViewHideMenuAndResume;
         private System.Windows.Forms.MenuStrip MainFormMainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem ControlsPause;
-        private System.Windows.Forms.ToolStripMenuItem ZoomSpeedCustom;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.ToolStripMenuItem ViewExit;
         private System.Windows.Forms.Button ExitButton;
@@ -376,6 +355,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem ViewPauseWhenMinimized;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripComboBox ColorSettingOptions;
     }
 }
 

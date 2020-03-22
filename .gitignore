@@ -1,4 +1,9 @@
 .vs/
 bin/
 obj/
-
+TestResults/
+test/
+packages/
+MathematicalSetViewerTests/bin/
+MathematicalSetViewerTests/obj/
+MathematicalSetViewerTests/.vs/

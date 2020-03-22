@@ -15,8 +15,6 @@ namespace MathematicalSetViewer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            UnitTests UnitTester = new UnitTests();
-            UnitTester.RunAllTests();
             Application.Run(new MainForm());
         }
     }

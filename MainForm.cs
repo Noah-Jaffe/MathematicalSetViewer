@@ -11,7 +11,6 @@ namespace MathematicalSetViewer
 
     public partial class MainForm : Form
     {
-        
         public MainForm()
         {
             InitializeComponent();
@@ -22,7 +21,7 @@ namespace MathematicalSetViewer
         /// TODO: should i change to UpdateAllGUIVisibility?
         /// </summary>
         /// <param name="isVisible">False to hide, true to show</param>
-        private void UpdateMenuBarVisibility(bool isVisible)
+        public void UpdateMenuBarVisibility(bool isVisible)
         {
             MSVData.MenuVisible = isVisible;
             this.MainFormMainMenuStrip.Visible = isVisible;
@@ -57,10 +56,8 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ControlsInput_CheckedChanged(object sender, EventArgs e)
         {
-            var Item = sender as ToolStripMenuItem;
-            MSVData.RenderEnabled = Item.Checked;
+            MSVData.RenderEnabled = ((ToolStripMenuItem)sender).Checked;
             updateText();
-            Debug.Print(this.Text);
         }
 
         /// <summary>
@@ -74,8 +71,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ControlsSmoothAcceleration_CheckedChanged(object sender, EventArgs e)
         {
-
-            // MSVData.SmoothAccelerationEnabled = 
+            MSVData.SmoothAccelerationEnabled = ((ToolStripMenuItem)sender).Checked; 
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -86,7 +82,8 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ZoomSpeedNone_Click(object sender, EventArgs e)
         {
-            MSVData._ZoomSpeed = 0;
+            MSVData.clearSmoothAccelerationData("ZoomSpeed");
+            MSVData.ZoomSpeed = 0;
         }
 
         /// <summary>
@@ -96,8 +93,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ControlsPause_CheckedChanged(object sender, EventArgs e)
         {
-            var Item = sender as ToolStripMenuItem;
-            MSVData.RenderEnabled = Item.Checked;
+            MSVData.RenderEnabled = ((ToolStripMenuItem)sender).Checked;
         }
 
         /// <summary>
@@ -107,17 +103,31 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ZoomSpeedCustom_Click(object sender, EventArgs e)
         {
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            String formTitle = "Custom Zoom Speed";
+            String formMessage = "Set the zoom speed.\n>0 := Zoom In\n=0 := No Zoom\n< 0 := Zoom out";
+            using (CustomDecimalInputForm customDecimalInput = new CustomDecimalInputForm(formTitle, formMessage, MSVData._ZoomSpeed, new Decimal[] { -128M, 128M}))
+            {
+                customDecimalInput.ShowDialog();
+                Decimal result = MSVData._ZoomSpeed;
+                if (customDecimalInput.Completed)
+                {
+                    MSVData.clearSmoothAccelerationData("ZoomSpeed");
+                    MSVData.ZoomSpeed = result;
+                }
+
+                // do what ever with result...
+            }
         }
 
         /// <summary>
-        /// Sets the active color pallet to the full range of colors.
+        /// Sets the active Color Palette to the full range of colors.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ColorSettings_CheckedChanged(object sender, EventArgs e)
         {
             // set the sender to checked, and set the other ones to unchecked
+            
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -316,5 +326,30 @@ namespace MathematicalSetViewer
                 MSVData.ZoomSpeed.ToString()));
 
         }
+
+        private void ControlsColorSettingChanged(object sender, EventArgs e)
+        {
+            switch(this.ColorSettingOptions.SelectedIndex)
+            {
+                case 0:
+                    Debug.Print("Generating full colors...");
+                    MSVData.ColorPalette = ColorPaletteGenerator.GenerateIterationColors();
+                    break;
+                case 1:
+                    Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod() + " ==> case 1");
+                    break;
+                case 2:
+                    Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod() + " ==> case 2");
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+            Debug.Print(this.ColorSettingOptions.SelectedItem.ToString());
+        }
+
+        
+
+ 
     }
+
 }

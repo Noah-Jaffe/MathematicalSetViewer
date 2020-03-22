@@ -7,9 +7,9 @@ namespace MathematicalSetViewer
     abstract class MathematicalSet
     {
         /// <summary>
-        /// The active color pallet to use when rendering an image
+        /// The active Color Palette to use when rendering an image
         /// </summary>
-        public Color[] ColorPallet { get; set; }
+        public Color[] ColorPalette { get; set; }
 
         /// <summary>
         /// Uses the Decimal form of the XY structure to hold the screen resolution
