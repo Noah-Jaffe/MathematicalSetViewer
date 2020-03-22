@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
-using Microsoft.CSharp;
 namespace MathematicalSetViewer
 {
     public static class MSVData
     {
-        
+
         /// <summary> Used to determine if new calculations are enabled. </summary>
         /// <value>
         /// True := unpaused, free to calculate at any time.
@@ -74,7 +71,7 @@ namespace MathematicalSetViewer
 
         internal static void clearSmoothAccelerationData(string v)
         {
-            switch(v)
+            switch (v)
             {
                 case "ZoomSpeed":
                     _ZoomSpeed = _ZoomDeltas.PopAll();
@@ -97,7 +94,7 @@ namespace MathematicalSetViewer
         {
             get
             {
-                _ZoomSpeed += SmoothAccelerationEnabled ? _ZoomDeltas.Pop() : _ZoomDeltas.PopAll(); 
+                _ZoomSpeed += SmoothAccelerationEnabled ? _ZoomDeltas.Pop() : _ZoomDeltas.PopAll();
                 return _ZoomSpeed;
             }
             set
@@ -124,7 +121,7 @@ namespace MathematicalSetViewer
         /// hardcoded defaults 
         /// TODO: Fix the hardcoded part?
         /// </summary>
-        public static Object[,] InitStartingData() 
+        public static void InitStartingData()
         {
             Dictionary<string, object> DefaultVals = new Dictionary<string, object>()
             {
@@ -138,27 +135,19 @@ namespace MathematicalSetViewer
 
 
             };
-            Type clas = typeof(MSVData);
-            var x = clas.GetProperties(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            Object[,] DataInfo = new Object[x.Length, 3];
-            for (int i = 0; i < x.Length; ++i)
-            {
-                DataInfo[i, 0] = x[i].Name;
-                DataInfo[i, 1] = x[i].PropertyType;
-                //DataInfo[i, 2] = x[i].GetValue;
-            }
-            return DataInfo;
-            /*Boolean CalculationsEnabled
-    MathematicalSetViewer.XY DrawResolution
-    Boolean RenderEnabled
-    Boolean MenuVisible
-    Boolean MovementDown
-    Boolean MovementLeft
-    Boolean MovementRight
-    Boolean MovementUp
-    Boolean SmoothAccelerationEnabled
-    System.Decimal _ZoomSpeed
-    System.Decimal ZoomSpeed*/
+            
+            /*  Boolean CalculationsEnabled
+                MathematicalSetViewer.XY DrawResolution
+                Boolean RenderEnabled
+                Boolean MenuVisible
+                Boolean MovementDown
+                Boolean MovementLeft
+                Boolean MovementRight
+                Boolean MovementUp
+                Boolean SmoothAccelerationEnabled
+                System.Decimal _ZoomSpeed
+                System.Decimal ZoomSpeed
+                */
         }
 
 
