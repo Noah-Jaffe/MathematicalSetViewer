@@ -11,10 +11,34 @@ namespace MathematicalSetViewer
 
     public partial class MainForm : Form
     {
+        private MathematicalSet MathematicalSetGenerator { get; set; }
+
         public MainForm()
         {
             InitializeComponent();
+
+            MathematicalSetGenerator = new MandelbrotGenerator();
+            XY ScreenDim = new XY
+            {
+                X = Convert.ToDecimal(Screen.FromControl(this).Bounds.Width), //10M
+                Y = Convert.ToDecimal(Screen.FromControl(this).Bounds.Height)//10M
+            };
+            MSVData.ColorPalette = ColorPaletteGenerator.GenerateIterationColors();
+            MathematicalSetGenerator.ScreenDimentions = ScreenDim;
+            Object map = MathematicalSetGenerator.CalculateRange(MathematicalSetGenerator.DefaultBotLeft, MathematicalSetGenerator.DefaultTopRight);
+            
+            SetNewBitmap((Bitmap)map);
         }
+
+        void SetNewBitmap(Bitmap image)
+        {
+            if (this.BackgroundImage != null)
+                this.BackgroundImage.Dispose();
+            this.BackgroundImage = image;
+        }
+
+
+
 
         /// <summary>
         /// Toggles the visibility for the menu bar, and all the minimize/exit buttons.
@@ -347,7 +371,6 @@ namespace MathematicalSetViewer
             Debug.Print(this.ColorSettingOptions.SelectedItem.ToString());
         }
 
-        
 
  
     }

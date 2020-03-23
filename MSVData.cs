@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 namespace MathematicalSetViewer
 {
     public static class MSVData
     {
-
+        
         /// <summary> Used to determine if new calculations are enabled. </summary>
         /// <value>
         /// True := unpaused, free to calculate at any time.
@@ -42,7 +43,8 @@ namespace MathematicalSetViewer
         /// </value>
         public static bool RenderEnabled { get; set; }
 
-        /// <summary> Used to determine if the menu bar is displayed or not. </summary>
+        
+        /// <summary> Used to determine if the menu bar is displaye.,d or not. </summary>
         /// TODO: see if i want to make these setters fire an event?
         public static bool MenuVisible { get; set; }
 
@@ -130,24 +132,17 @@ namespace MathematicalSetViewer
                 { "MenuVisible", true },
                 { "RenderEnabled", false },
                 { "CalculationsEnabled", false },
-                { "ColorPalette", null }, // TODO: change from null? 
-
-
-
+                { "ColorPalette", null },
+                { "MovementDown", false },
+                { "MovementLeft", false },
+                { "MovementRight", false },
+                { "MovementUp", false},
             };
+            foreach(var i in DefaultVals)
+            {
+                Debug.Print(i.ToString());
+            }
             
-            /*  Boolean CalculationsEnabled
-                MathematicalSetViewer.XY DrawResolution
-                Boolean RenderEnabled
-                Boolean MenuVisible
-                Boolean MovementDown
-                Boolean MovementLeft
-                Boolean MovementRight
-                Boolean MovementUp
-                Boolean SmoothAccelerationEnabled
-                System.Decimal _ZoomSpeed
-                System.Decimal ZoomSpeed
-                */
         }
 
 
