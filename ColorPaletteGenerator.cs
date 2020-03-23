@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 
 namespace MathematicalSetViewer
@@ -18,6 +19,7 @@ namespace MathematicalSetViewer
         /// <returns>An array of <c>Color</c>'s in rainbow order.</returns>
         public static Color[] GenerateIterationColors(Int32 maxR = 255, Int32 maxG = 255, Int32 maxB = 255, Int32 minR = 0, Int32 minG = 0, Int32 minB = 0)
         {
+            Debug.Print($"Generating colors R <{minR},{maxR}> G<{minG},{maxG}> B<{minB},{maxB}>");
             DateTime startTime = DateTime.Now;
             startTime = DateTime.Now;
             // [rainbow_id,rgb_index]

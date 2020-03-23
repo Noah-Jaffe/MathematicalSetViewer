@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicalSetViewer", "MathematicalSetViewer.csproj", "{5E0C9490-286A-4041-A8E3-906B9959EA69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicalSetViewerTests", "..\MathematicalSetViewerTests\MathematicalSetViewerTests.csproj", "{5E0B031B-DE58-4ACE-9E3B-1D0FD4B933FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathematicalSetViewerTests", "..\MathematicalSetViewerTests\MathematicalSetViewerTests.csproj", "{BE441733-8DE7-43FD-9B18-D07386A35A81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{5E0C9490-286A-4041-A8E3-906B9959EA69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E0C9490-286A-4041-A8E3-906B9959EA69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E0C9490-286A-4041-A8E3-906B9959EA69}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E0B031B-DE58-4ACE-9E3B-1D0FD4B933FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E0B031B-DE58-4ACE-9E3B-1D0FD4B933FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E0B031B-DE58-4ACE-9E3B-1D0FD4B933FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E0B031B-DE58-4ACE-9E3B-1D0FD4B933FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE441733-8DE7-43FD-9B18-D07386A35A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE441733-8DE7-43FD-9B18-D07386A35A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE441733-8DE7-43FD-9B18-D07386A35A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE441733-8DE7-43FD-9B18-D07386A35A81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

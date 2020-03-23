@@ -111,14 +111,12 @@
             this.ZoomSpeedNone.Name = "ZoomSpeedNone";
             this.ZoomSpeedNone.Size = new System.Drawing.Size(116, 22);
             this.ZoomSpeedNone.Text = "None";
-            this.ZoomSpeedNone.Click += new System.EventHandler(this.ZoomSpeedNone_Click);
             // 
             // ZoomSpeedCustom
             // 
             this.ZoomSpeedCustom.Name = "ZoomSpeedCustom";
             this.ZoomSpeedCustom.Size = new System.Drawing.Size(116, 22);
             this.ZoomSpeedCustom.Text = "Custom";
-            this.ZoomSpeedCustom.Click += new System.EventHandler(this.ZoomSpeedCustom_Click);
             // 
             // ControlsPanSpeed
             // 
@@ -158,14 +156,12 @@
             this.ColorSettingOptions.Name = "ColorSettingOptions";
             this.ColorSettingOptions.Size = new System.Drawing.Size(121, 23);
             this.ColorSettingOptions.Text = "Full Color";
-            this.ColorSettingOptions.SelectedIndexChanged += new System.EventHandler(this.ControlsColorSettingChanged);
             // 
             // ColorSettingsCustom
             // 
             this.ColorSettingsCustom.Name = "ColorSettingsCustom";
             this.ColorSettingsCustom.Size = new System.Drawing.Size(181, 22);
             this.ColorSettingsCustom.Text = "Custom";
-            this.ColorSettingsCustom.CheckStateChanged += new System.EventHandler(this.ColorSettings_CheckedChanged);
             // 
             // MathematicalSetMenuTSMI
             // 
@@ -250,7 +246,6 @@
             this.ViewExit.Name = "ViewExit";
             this.ViewExit.Size = new System.Drawing.Size(198, 22);
             this.ViewExit.Text = "Exit";
-            this.ViewExit.Click += new System.EventHandler(this.ViewExit_Click);
             // 
             // MainFormMainMenuStrip
             // 
@@ -260,7 +255,7 @@
             this.ViewMenuTSMI});
             this.MainFormMainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MainFormMainMenuStrip.Name = "MainFormMainMenuStrip";
-            this.MainFormMainMenuStrip.Size = new System.Drawing.Size(727, 24);
+            this.MainFormMainMenuStrip.Size = new System.Drawing.Size(800, 24);
             this.MainFormMainMenuStrip.TabIndex = 0;
             this.MainFormMainMenuStrip.Text = "MainFormMainMenuStrip";
             // 
@@ -273,7 +268,7 @@
             this.ExitButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.ExitButton.ForeColor = System.Drawing.Color.Black;
-            this.ExitButton.Location = new System.Drawing.Point(699, 0);
+            this.ExitButton.Location = new System.Drawing.Point(772, 0);
             this.ExitButton.Margin = new System.Windows.Forms.Padding(0);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(27, 22);
@@ -281,18 +276,16 @@
             this.ExitButton.TabStop = false;
             this.ExitButton.Text = "×";
             this.ExitButton.UseVisualStyleBackColor = false;
-            this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
             // MinimizeButton
             // 
-            this.MinimizeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.MinimizeButton.AutoSize = true;
             this.MinimizeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.MinimizeButton.BackColor = System.Drawing.Color.Red;
             this.MinimizeButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.MinimizeButton.ForeColor = System.Drawing.Color.Black;
-            this.MinimizeButton.Location = new System.Drawing.Point(671, 0);
+            this.MinimizeButton.Location = new System.Drawing.Point(746, 0);
             this.MinimizeButton.Margin = new System.Windows.Forms.Padding(0);
             this.MinimizeButton.Name = "MinimizeButton";
             this.MinimizeButton.Size = new System.Drawing.Size(27, 22);
@@ -300,24 +293,23 @@
             this.MinimizeButton.TabStop = false;
             this.MinimizeButton.Text = "—";
             this.MinimizeButton.UseVisualStyleBackColor = false;
-            this.MinimizeButton.Click += new System.EventHandler(this.MinimizeButton_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(727, 526);
+            this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.MinimizeButton);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.MainFormMainMenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MainMenuStrip = this.MainFormMainMenuStrip;
             this.Name = "MainForm";
             this.Text = "Mathematical Set Viewer";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
             this.MainFormMainMenuStrip.ResumeLayout(false);
             this.MainFormMainMenuStrip.PerformLayout();
             this.ResumeLayout(false);

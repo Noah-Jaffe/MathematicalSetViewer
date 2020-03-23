@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="LinkedList.cs" />
     <Compile Include="MandelbrotGenerator.cs" />
+    <Compile Include="MathematicalSetTester.cs" />
     <Compile Include="MSVData.cs" />
     <Compile Include="XY.cs" />
     <Compile Include="MainForm.cs">
@@ -103,6 +104,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

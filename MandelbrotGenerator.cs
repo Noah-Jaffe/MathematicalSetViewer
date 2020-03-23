@@ -22,7 +22,6 @@ namespace MathematicalSetViewer
             }
         }
 
-       
         public override XY DefaultTopRight
         {
             get
@@ -34,7 +33,6 @@ namespace MathematicalSetViewer
                 };
             }
         }
-
 
         public override object CalculateRange(XY botLeft, XY topRight)
         {

@@ -29,7 +29,7 @@ namespace MathematicalSetViewer
         /// Used to store the integer resolution of the drawing area in pixles. 
         /// Uses XY.Xi, and XY.Yi
         /// </summary>
-        public static XY DrawResolution { get; set; }
+        public static XY DrawSize { get; set; }
 
         /// <summary>
         /// If user input is actively being used to determine movement.
@@ -68,18 +68,26 @@ namespace MathematicalSetViewer
         /// </remarks>
         public static Decimal PanSpeed { get; set; }
 
+        /// <summary>
+        /// The size of the expected generated images. 
+        /// Uses XY.Xi, and XY.Yi
+        /// </summary>
+        public static XY PictureSize { get; set; }
+
         /// <summary> True when we want to use smooth acceleration for movement. </summary>
         public static bool SmoothAccelerationEnabled { get; set; }
 
+        /*
         internal static void clearSmoothAccelerationData(string v)
         {
             switch (v)
             {
-                case "ZoomSpeed":
+                case "ZoomDelta":
                     _ZoomSpeed = _ZoomDeltas.PopAll();
                     break;
             }
         }
+        */
 
         /// <summary> A Decimal value to determine the zoom speed. </summary>
         /// <summary>
@@ -90,9 +98,11 @@ namespace MathematicalSetViewer
         /// <remarks>
         /// This property is effected by <c>SmoothAccelerationEnabled</c>
         /// </remarks>
-        public static Decimal _ZoomSpeed { get; set; }
-        private static LinkedList _ZoomDeltas = new LinkedList(new[] { 0M });
-        public static Decimal ZoomSpeed
+        public static Decimal ZoomSpeed { get; set; }
+        /*
+         * commented out because I was just playing with the limits of properties 
+        LinkedList _ZoomDeltas = new LinkedList(new[] { 0M });
+        public static Decimal ZoomDelta
         {
             get
             {
@@ -104,7 +114,7 @@ namespace MathematicalSetViewer
                 _ZoomDeltas.AddLast(SmoothAccelerationEnabled ? GetSmoothedList(value) : new Decimal[] { value });
             }
         }
-
+         */
 
         static Decimal[] GetSmoothedList(Decimal total)
         {
@@ -123,26 +133,34 @@ namespace MathematicalSetViewer
         /// hardcoded defaults 
         /// TODO: Fix the hardcoded part?
         /// </summary>
-        public static void InitStartingData()
+        public static void InitDefaultValues()
         {
-            Dictionary<string, object> DefaultVals = new Dictionary<string, object>()
+            Debug.Print("InitDefaultValues");
+            // The working area is the desktop area of the display, excluding 
+            // taskbars, docked windows, and docked tool bars.
+            Rectangle ScreenWorkingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
+            // The bounds are for the entire screen (think fullscreen mode)
+            Rectangle ScreenBounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+
+
+            MSVData.CalculationsEnabled = true;
+            MSVData.ColorPalette = ColorPaletteGenerator.GenerateIterationColors();
+            MSVData.DrawSize = new XY
             {
-                { "ZoomSpeed", 0 },
-                { "SmoothAccelerationEnabled", false },
-                { "MenuVisible", true },
-                { "RenderEnabled", false },
-                { "CalculationsEnabled", false },
-                { "ColorPalette", null },
-                { "MovementDown", false },
-                { "MovementLeft", false },
-                { "MovementRight", false },
-                { "MovementUp", false},
+                X = (Decimal)(ScreenWorkingArea.Width - ScreenWorkingArea.X),
+                Y = (Decimal)(ScreenWorkingArea.Height - ScreenWorkingArea.Y)
             };
-            foreach(var i in DefaultVals)
-            {
-                Debug.Print(i.ToString());
-            }
-            
+            MSVData.InputEnabled = true;
+            MSVData.MenuVisible = true;
+            MSVData.MovementDown = false;
+            MSVData.MovementLeft = false;
+            MSVData.MovementRight = false;
+            MSVData.MovementUp = false;
+             MSVData.PanSpeed = 0;
+            MSVData.RenderEnabled = true;
+            MSVData.SmoothAccelerationEnabled = false;
+            MSVData.ZoomSpeed = 0;
+            MSVData.PictureSize = new XY { Xi = 512, Yi = 512 };
         }
 
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MathematicalSetViewer
@@ -11,23 +12,49 @@ namespace MathematicalSetViewer
 
     public partial class MainForm : Form
     {
+        Thread ZoomThread { get; set; }
         private MathematicalSet MathematicalSetGenerator { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
-
-            MathematicalSetGenerator = new MandelbrotGenerator();
-            XY ScreenDim = new XY
+            // This gets the working area (will not include space hidden by taskbar)
+            MSVData.InitDefaultValues();
+            MathematicalSetGenerator = new MathematicalSetTester();
+            /*XY ScreenDim = new XY
             {
                 X = Convert.ToDecimal(Screen.FromControl(this).Bounds.Width), //10M
                 Y = Convert.ToDecimal(Screen.FromControl(this).Bounds.Height)//10M
             };
-            MSVData.ColorPalette = ColorPaletteGenerator.GenerateIterationColors();
-            MathematicalSetGenerator.ScreenDimentions = ScreenDim;
-            Object map = MathematicalSetGenerator.CalculateRange(MathematicalSetGenerator.DefaultBotLeft, MathematicalSetGenerator.DefaultTopRight);
+
+            MathematicalSetGenerator.ScreenDimentions = ScreenDim;*/
             
-            SetNewBitmap((Bitmap)map);
+        }
+        private static void getZoomed(ref XY botLeft, ref XY topRight)
+        {
+
+            // if zoom is zero do nothing
+            // if zoom is 0.5, decrease the area by CurrArea*Zoom
+            XY XYMidpoints = new XY
+            {
+                X = (topRight.X + botLeft.X) / 2M, //((topRight.X - botLeft.X) / 2M) + botLeft.X,
+                Y = (topRight.Y + botLeft.Y) / 2M //((topRight.Y - botLeft.Y) / 2M) + botLeft.Y 
+            };
+            XY XYSize = new XY
+            {
+                X = (topRight.X - botLeft.X) / MSVData.ZoomSpeed, 
+                Y = (topRight.Y - botLeft.Y) / MSVData.ZoomSpeed
+            };
+            XY rangeZoomedDifference = new XY
+            {
+                X = (topRight.X - botLeft.X) / (MSVData.ZoomSpeed > 0 ? 4M : 0.25M),
+                Y = (topRight.Y - botLeft.Y) / (MSVData.ZoomSpeed > 0 ? 4M : 0.25M)
+            };
+            botLeft.X = XYMidpoints.X - rangeZoomedDifference.X;
+            botLeft.Y = XYMidpoints.Y - rangeZoomedDifference.Y;
+            topRight.X = XYMidpoints.X + rangeZoomedDifference.X;
+            topRight.Y = XYMidpoints.Y + rangeZoomedDifference.Y;
+
         }
 
         void SetNewBitmap(Bitmap image)
@@ -106,7 +133,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ZoomSpeedNone_Click(object sender, EventArgs e)
         {
-            MSVData.clearSmoothAccelerationData("ZoomSpeed");
+            //MSVData.clearSmoothAccelerationData("ZoomDelta");
             MSVData.ZoomSpeed = 0;
         }
 
@@ -129,13 +156,13 @@ namespace MathematicalSetViewer
         {
             String formTitle = "Custom Zoom Speed";
             String formMessage = "Set the zoom speed.\n>0 := Zoom In\n=0 := No Zoom\n< 0 := Zoom out";
-            using (CustomDecimalInputForm customDecimalInput = new CustomDecimalInputForm(formTitle, formMessage, MSVData._ZoomSpeed, new Decimal[] { -128M, 128M}))
+            using (CustomDecimalInputForm customDecimalInput = new CustomDecimalInputForm(formTitle, formMessage, MSVData.ZoomSpeed, new Decimal[] { -128M, 128M}))
             {
                 customDecimalInput.ShowDialog();
-                Decimal result = MSVData._ZoomSpeed;
+                Decimal result = MSVData.ZoomSpeed;
                 if (customDecimalInput.Completed)
                 {
-                    MSVData.clearSmoothAccelerationData("ZoomSpeed");
+                    //MSVData.clearSmoothAccelerationData("ZoomDelta");
                     MSVData.ZoomSpeed = result;
                 }
 
@@ -324,12 +351,28 @@ namespace MathematicalSetViewer
             if (e.Delta > 0)
             {
                 // Mouse wheel up
-                MSVData.ZoomSpeed = 1;
+                MSVData.ZoomSpeed += 1;
             }
             else
             {
                 // Mouse wheel down
-                MSVData.ZoomSpeed = -1;
+                MSVData.ZoomSpeed -= 1;
+            }
+            if (ZoomThread == null) {
+                ZoomThread = new Thread(delegate ()
+                {
+                    RunZoomThread(this, MathematicalSetGenerator);
+                })
+                {
+                    IsBackground = true,
+                    Name = "ZoomThread"
+                };
+            } else if (!ZoomThread.IsAlive && MSVData.ZoomSpeed != 0)
+            {
+                ZoomThread.Start();
+            } else if (ZoomThread.IsAlive && MSVData.ZoomSpeed == 0)
+            {
+                // do we kill the thread here?
             }
             updateText();
         }
@@ -372,7 +415,23 @@ namespace MathematicalSetViewer
         }
 
 
- 
+        private static void RunZoomThread(Form mainform, MathematicalSet MathematicalSetGenerator)
+        {
+            XY lowerLeft = MathematicalSetGenerator.DefaultBotLeft;
+            XY upperRight = MathematicalSetGenerator.DefaultTopRight;
+            Decimal i = 0M;
+            while (MSVData.CalculationsEnabled && MSVData.ZoomSpeed != 0)
+            {
+                Debug.WriteLine(i++);
+                Object map = MathematicalSetGenerator.CalculateRange(lowerLeft, upperRight);
+                if (mainform.BackgroundImage != null)
+                    mainform.BackgroundImage.Dispose();
+                mainform.BackgroundImage = (Bitmap)map; 
+                Thread.Sleep(1000);
+                getZoomed(ref lowerLeft, ref upperRight);
+            }
+        }
+
     }
 
 }
