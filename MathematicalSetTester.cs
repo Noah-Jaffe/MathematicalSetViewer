@@ -20,8 +20,8 @@ namespace MathematicalSetViewer
             {
                 return new XY
                 {
-                    X = -100M,
-                    Y = -100M
+                    X = 0M,
+                    Y = 0M
                 };
             }
         }
@@ -32,8 +32,8 @@ namespace MathematicalSetViewer
             {
                 return new XY
                 {
-                    X = 1430, // the length of MSVData.ColorPalette when using full color spectrum color list
-                    Y = 980
+                    X = 1530M, // the length of MSVData.ColorPalette when using full color spectrum color list
+                    Y = 100M
                 };
             }
         }
@@ -87,10 +87,15 @@ namespace MathematicalSetViewer
             for (int Px = 0; Px < PxMax; ++Px)
             {
                 // x0 = scaled x coordinate of pixel(scaled to lie in the default scale)
-                int x0 = (int)(Px * XYRatio.X);
+                Decimal x0 = ((Px * XYRatio.X) + botLeft.X);
                 for (int Py = 0; Py < PyMax; ++Py)
                 {
-                    bitmap.SetPixel(Px, Py, MSVData.ColorPalette[x0]);
+                    if (x0 < MSVData.ColorPalette.Length && x0 >= 0)
+                    {
+                        //colorValue = x0 < MSVData.ColorPalette.Length && x0 >= 0 ? MSVData.ColorPalette[(int)x0] : Color.Black;
+                        colorValue = Convert.ToInt32(x0.ToString()[x0.ToString().Length - 1]) % 2 == 0 ? Color.White : Color.Black; 
+                        bitmap.SetPixel(Px, Py, colorValue);
+                    }
                 }
             }
             Debug.WriteLine("Completed image");

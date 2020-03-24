@@ -30,7 +30,7 @@ namespace MathematicalSetViewer
             MathematicalSetGenerator.ScreenDimentions = ScreenDim;*/
             
         }
-        private static void getZoomed(ref XY botLeft, ref XY topRight)
+        private static XY[] getZoomed(XY botLeft, XY topRight)
         {
 
             // if zoom is zero do nothing
@@ -39,11 +39,6 @@ namespace MathematicalSetViewer
             {
                 X = (topRight.X + botLeft.X) / 2M, //((topRight.X - botLeft.X) / 2M) + botLeft.X,
                 Y = (topRight.Y + botLeft.Y) / 2M //((topRight.Y - botLeft.Y) / 2M) + botLeft.Y 
-            };
-            XY XYSize = new XY
-            {
-                X = (topRight.X - botLeft.X) / MSVData.ZoomSpeed, 
-                Y = (topRight.Y - botLeft.Y) / MSVData.ZoomSpeed
             };
             XY rangeZoomedDifference = new XY
             {
@@ -54,7 +49,7 @@ namespace MathematicalSetViewer
             botLeft.Y = XYMidpoints.Y - rangeZoomedDifference.Y;
             topRight.X = XYMidpoints.X + rangeZoomedDifference.X;
             topRight.Y = XYMidpoints.Y + rangeZoomedDifference.Y;
-
+            return new XY[] { botLeft, topRight };
         }
 
         void SetNewBitmap(Bitmap image)
@@ -63,10 +58,18 @@ namespace MathematicalSetViewer
                 this.BackgroundImage.Dispose();
             this.BackgroundImage = image;
         }
+        
+        /// <summary>
+        /// Temp function to keep track of whats to do
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void TODO(object sender, EventArgs e)
+        {
+            Debug.WriteLine($"TODO: {sender.ToString()}");
+        }
 
-
-
-
+        
         /// <summary>
         /// Toggles the visibility for the menu bar, and all the minimize/exit buttons.
         /// TODO: should i change to UpdateAllGUIVisibility?
@@ -220,10 +223,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void MinimizeButton_Click(object sender, System.EventArgs e)
         {
-            if (this.ViewPauseWhenMinimized.Checked)
-            {
-                MSVData.RenderEnabled = false;
-            }
+
         }
 
         /// <summary>
@@ -340,12 +340,13 @@ namespace MathematicalSetViewer
             }
             updateText();
         }
-        
+
         /// <summary>
         /// Handles the zoom controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -358,7 +359,7 @@ namespace MathematicalSetViewer
                 // Mouse wheel down
                 MSVData.ZoomSpeed -= 1;
             }
-            if (ZoomThread == null) {
+            if ((ZoomThread == null || !ZoomThread.IsAlive) && MSVData.ZoomSpeed != 0) {
                 ZoomThread = new Thread(delegate ()
                 {
                     RunZoomThread(this, MathematicalSetGenerator);
@@ -367,7 +368,8 @@ namespace MathematicalSetViewer
                     IsBackground = true,
                     Name = "ZoomThread"
                 };
-            } else if (!ZoomThread.IsAlive && MSVData.ZoomSpeed != 0)
+            } 
+            if (!ZoomThread.IsAlive && MSVData.ZoomSpeed != 0)
             {
                 ZoomThread.Start();
             } else if (ZoomThread.IsAlive && MSVData.ZoomSpeed == 0)
@@ -426,9 +428,12 @@ namespace MathematicalSetViewer
                 Object map = MathematicalSetGenerator.CalculateRange(lowerLeft, upperRight);
                 if (mainform.BackgroundImage != null)
                     mainform.BackgroundImage.Dispose();
-                mainform.BackgroundImage = (Bitmap)map; 
-                Thread.Sleep(1000);
-                getZoomed(ref lowerLeft, ref upperRight);
+                mainform.BackgroundImage = (Bitmap)map;
+                Debug.WriteLine("Sleeping before updating again");
+                Thread.Sleep(50);
+                XY[] t = getZoomed(lowerLeft, upperRight);
+                lowerLeft = t[0];
+                upperRight = t[1];
             }
         }
 

@@ -81,6 +81,7 @@
             this.ControlsPause.Size = new System.Drawing.Size(183, 22);
             this.ControlsPause.Text = "Pause";
             this.ControlsPause.ToolTipText = "Pauses the screen";
+            this.ControlsPause.Click += new System.EventHandler(this.ControlsPause_CheckedChanged);
             // 
             // ControlsInput
             // 
@@ -91,6 +92,7 @@
             this.ControlsInput.Size = new System.Drawing.Size(183, 22);
             this.ControlsInput.Text = "Input";
             this.ControlsInput.ToolTipText = "Enables/Disables input from keyboard";
+            this.ControlsInput.Click += new System.EventHandler(this.ControlsInput_CheckedChanged);
             // 
             // toolStripSeparator1
             // 
@@ -111,18 +113,21 @@
             this.ZoomSpeedNone.Name = "ZoomSpeedNone";
             this.ZoomSpeedNone.Size = new System.Drawing.Size(116, 22);
             this.ZoomSpeedNone.Text = "None";
+            this.ZoomSpeedNone.Click += new System.EventHandler(this.ZoomSpeedNone_Click);
             // 
             // ZoomSpeedCustom
             // 
             this.ZoomSpeedCustom.Name = "ZoomSpeedCustom";
             this.ZoomSpeedCustom.Size = new System.Drawing.Size(116, 22);
             this.ZoomSpeedCustom.Text = "Custom";
+            this.ZoomSpeedCustom.Click += new System.EventHandler(this.ZoomSpeedCustom_Click);
             // 
             // ControlsPanSpeed
             // 
             this.ControlsPanSpeed.Name = "ControlsPanSpeed";
             this.ControlsPanSpeed.Size = new System.Drawing.Size(183, 22);
             this.ControlsPanSpeed.Text = "Pan speed";
+            this.ControlsPanSpeed.Click += new System.EventHandler(this.TODO);
             // 
             // ControlsSmoothAcceleration
             // 
@@ -131,6 +136,7 @@
             this.ControlsSmoothAcceleration.Size = new System.Drawing.Size(183, 22);
             this.ControlsSmoothAcceleration.Text = "Smooth acceleration";
             this.ControlsSmoothAcceleration.ToolTipText = "Accelerate smoothly or iteratively";
+            this.ControlsSmoothAcceleration.Click += new System.EventHandler(this.ControlsSmoothAcceleration_CheckedChanged);
             // 
             // toolStripSeparator2
             // 
@@ -155,13 +161,14 @@
             "todo:custom"});
             this.ColorSettingOptions.Name = "ColorSettingOptions";
             this.ColorSettingOptions.Size = new System.Drawing.Size(121, 23);
-            this.ColorSettingOptions.Text = "Full Color";
+            this.ColorSettingOptions.TextChanged += new System.EventHandler(this.MathematicalSet_UpdateSet);
             // 
             // ColorSettingsCustom
             // 
             this.ColorSettingsCustom.Name = "ColorSettingsCustom";
             this.ColorSettingsCustom.Size = new System.Drawing.Size(181, 22);
             this.ColorSettingsCustom.Text = "Custom";
+            this.ColorSettingsCustom.Click += new System.EventHandler(this.TODO);
             // 
             // MathematicalSetMenuTSMI
             // 
@@ -181,6 +188,7 @@
             this.MathematicalSetMandelbrot.Name = "MathematicalSetMandelbrot";
             this.MathematicalSetMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetMandelbrot.Text = "Mandelbrot";
+            this.MathematicalSetMandelbrot.Click += new System.EventHandler(this.TODO);
             // 
             // MathematicalSetInverseMandelbrot
             // 
@@ -188,6 +196,7 @@
             this.MathematicalSetInverseMandelbrot.Name = "MathematicalSetInverseMandelbrot";
             this.MathematicalSetInverseMandelbrot.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetInverseMandelbrot.Text = "Inverse Mandelbrot";
+            this.MathematicalSetInverseMandelbrot.Click += new System.EventHandler(this.TODO);
             // 
             // MathematicalSetJuliaSet
             // 
@@ -195,6 +204,7 @@
             this.MathematicalSetJuliaSet.Name = "MathematicalSetJuliaSet";
             this.MathematicalSetJuliaSet.Size = new System.Drawing.Size(176, 22);
             this.MathematicalSetJuliaSet.Text = "Julia Set";
+            this.MathematicalSetJuliaSet.Click += new System.EventHandler(this.TODO);
             // 
             // ViewMenuTSMI
             // 
@@ -214,18 +224,21 @@
             this.ViewHideMenu.Name = "ViewHideMenu";
             this.ViewHideMenu.Size = new System.Drawing.Size(198, 22);
             this.ViewHideMenu.Text = "Hide menu";
+            this.ViewHideMenu.Click += new System.EventHandler(this.TODO);
             // 
             // ViewResume
             // 
             this.ViewResume.Name = "ViewResume";
             this.ViewResume.Size = new System.Drawing.Size(198, 22);
             this.ViewResume.Text = "Resume";
+            this.ViewResume.Click += new System.EventHandler(this.TODO);
             // 
             // ViewHideMenuAndResume
             // 
             this.ViewHideMenuAndResume.Name = "ViewHideMenuAndResume";
             this.ViewHideMenuAndResume.Size = new System.Drawing.Size(198, 22);
             this.ViewHideMenuAndResume.Text = "Hide Menu and resume";
+            this.ViewHideMenuAndResume.Click += new System.EventHandler(this.TODO);
             // 
             // ViewPauseWhenMinimized
             // 
@@ -235,6 +248,7 @@
             this.ViewPauseWhenMinimized.Name = "ViewPauseWhenMinimized";
             this.ViewPauseWhenMinimized.Size = new System.Drawing.Size(198, 22);
             this.ViewPauseWhenMinimized.Text = "Pause when minimized";
+            this.ViewPauseWhenMinimized.Click += new System.EventHandler(this.TODO);
             // 
             // toolStripSeparator3
             // 
@@ -246,6 +260,7 @@
             this.ViewExit.Name = "ViewExit";
             this.ViewExit.Size = new System.Drawing.Size(198, 22);
             this.ViewExit.Text = "Exit";
+            this.ViewExit.Click += new System.EventHandler(this.ViewExit_Click);
             // 
             // MainFormMainMenuStrip
             // 
@@ -276,6 +291,7 @@
             this.ExitButton.TabStop = false;
             this.ExitButton.Text = "×";
             this.ExitButton.UseVisualStyleBackColor = false;
+            this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
             // MinimizeButton
             // 
@@ -293,23 +309,27 @@
             this.MinimizeButton.TabStop = false;
             this.MinimizeButton.Text = "—";
             this.MinimizeButton.UseVisualStyleBackColor = false;
+            this.MinimizeButton.Click += new System.EventHandler(this.TODO);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.Controls.Add(this.MinimizeButton);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.MainFormMainMenuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MainMenuStrip = this.MainFormMainMenuStrip;
             this.Name = "MainForm";
             this.Text = "Mathematical Set Viewer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseWheel);
             this.MainFormMainMenuStrip.ResumeLayout(false);
             this.MainFormMainMenuStrip.PerformLayout();
             this.ResumeLayout(false);

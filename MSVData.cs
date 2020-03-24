@@ -6,7 +6,12 @@ namespace MathematicalSetViewer
 {
     public static class MSVData
     {
-        
+        public static XY WindowRangeLower { get; set; }
+        public static XY WindowRangeUpper { get; set; }
+        public static XY CalculateRangeLower { get; set; }
+        public static XY CalculateRangeUpper { get; set; }
+
+
         /// <summary> Used to determine if new calculations are enabled. </summary>
         /// <value>
         /// True := unpaused, free to calculate at any time.
@@ -30,7 +35,7 @@ namespace MathematicalSetViewer
         /// Uses XY.Xi, and XY.Yi
         /// </summary>
         public static XY DrawSize { get; set; }
-
+        
         /// <summary>
         /// If user input is actively being used to determine movement.
         /// </summary>
@@ -43,7 +48,6 @@ namespace MathematicalSetViewer
         /// </value>
         public static bool RenderEnabled { get; set; }
 
-        
         /// <summary> Used to determine if the menu bar is displaye.,d or not. </summary>
         /// TODO: see if i want to make these setters fire an event?
         public static bool MenuVisible { get; set; }
