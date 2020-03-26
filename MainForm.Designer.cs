@@ -1,4 +1,6 @@
-﻿namespace MathematicalSetViewer
+﻿using System.Collections.Generic;
+
+namespace MathematicalSetViewer
 {
     partial class MainForm
     {
@@ -47,7 +49,6 @@
             this.MathematicalSetJuliaSet = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewMenuTSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewHideMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.ViewResume = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewHideMenuAndResume = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewPauseWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -62,7 +63,6 @@
             // ControlsMenuTSMI
             // 
             this.ControlsMenuTSMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ControlsPause,
             this.ControlsInput,
             this.toolStripSeparator1,
             this.ControlsZoomSpeedMenu,
@@ -78,10 +78,10 @@
             // 
             this.ControlsPause.CheckOnClick = true;
             this.ControlsPause.Name = "ControlsPause";
-            this.ControlsPause.Size = new System.Drawing.Size(183, 22);
+            this.ControlsPause.Size = new System.Drawing.Size(198, 22);
             this.ControlsPause.Text = "Pause";
             this.ControlsPause.ToolTipText = "Pauses the screen";
-            this.ControlsPause.Click += new System.EventHandler(this.ControlsPause_CheckedChanged);
+            this.ControlsPause.Click += new System.EventHandler(this.PauseResume_CheckedChanged);
             // 
             // ControlsInput
             // 
@@ -172,45 +172,15 @@
             // 
             // MathematicalSetMenuTSMI
             // 
-            this.MathematicalSetMenuTSMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.MathematicalSetMandelbrot,
-            this.MathematicalSetInverseMandelbrot,
-            this.MathematicalSetJuliaSet});
             this.MathematicalSetMenuTSMI.Name = "MathematicalSetMenuTSMI";
             this.MathematicalSetMenuTSMI.Size = new System.Drawing.Size(111, 20);
             this.MathematicalSetMenuTSMI.Text = "Mathematical Set";
-            // 
-            // MathematicalSetMandelbrot
-            // 
-            this.MathematicalSetMandelbrot.Checked = true;
-            this.MathematicalSetMandelbrot.CheckOnClick = true;
-            this.MathematicalSetMandelbrot.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.MathematicalSetMandelbrot.Name = "MathematicalSetMandelbrot";
-            this.MathematicalSetMandelbrot.Size = new System.Drawing.Size(176, 22);
-            this.MathematicalSetMandelbrot.Text = "Mandelbrot";
-            this.MathematicalSetMandelbrot.Click += new System.EventHandler(this.TODO);
-            // 
-            // MathematicalSetInverseMandelbrot
-            // 
-            this.MathematicalSetInverseMandelbrot.CheckOnClick = true;
-            this.MathematicalSetInverseMandelbrot.Name = "MathematicalSetInverseMandelbrot";
-            this.MathematicalSetInverseMandelbrot.Size = new System.Drawing.Size(176, 22);
-            this.MathematicalSetInverseMandelbrot.Text = "Inverse Mandelbrot";
-            this.MathematicalSetInverseMandelbrot.Click += new System.EventHandler(this.TODO);
-            // 
-            // MathematicalSetJuliaSet
-            // 
-            this.MathematicalSetJuliaSet.CheckOnClick = true;
-            this.MathematicalSetJuliaSet.Name = "MathematicalSetJuliaSet";
-            this.MathematicalSetJuliaSet.Size = new System.Drawing.Size(176, 22);
-            this.MathematicalSetJuliaSet.Text = "Julia Set";
-            this.MathematicalSetJuliaSet.Click += new System.EventHandler(this.TODO);
             // 
             // ViewMenuTSMI
             // 
             this.ViewMenuTSMI.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ViewHideMenu,
-            this.ViewResume,
+            this.ControlsPause,
             this.ViewHideMenuAndResume,
             this.ViewPauseWhenMinimized,
             this.toolStripSeparator3,
@@ -224,21 +194,14 @@
             this.ViewHideMenu.Name = "ViewHideMenu";
             this.ViewHideMenu.Size = new System.Drawing.Size(198, 22);
             this.ViewHideMenu.Text = "Hide menu";
-            this.ViewHideMenu.Click += new System.EventHandler(this.TODO);
-            // 
-            // ViewResume
-            // 
-            this.ViewResume.Name = "ViewResume";
-            this.ViewResume.Size = new System.Drawing.Size(198, 22);
-            this.ViewResume.Text = "Resume";
-            this.ViewResume.Click += new System.EventHandler(this.TODO);
+            this.ViewHideMenu.Click += new System.EventHandler(this.ViewHideMenu_Click);
             // 
             // ViewHideMenuAndResume
             // 
             this.ViewHideMenuAndResume.Name = "ViewHideMenuAndResume";
             this.ViewHideMenuAndResume.Size = new System.Drawing.Size(198, 22);
             this.ViewHideMenuAndResume.Text = "Hide Menu and resume";
-            this.ViewHideMenuAndResume.Click += new System.EventHandler(this.TODO);
+            this.ViewHideMenuAndResume.Click += new System.EventHandler(this.ViewHideMenuAndResume_Click);
             // 
             // ViewPauseWhenMinimized
             // 
@@ -325,7 +288,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "MainForm";
             this.Text = "Mathematical Set Viewer";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
@@ -349,13 +312,13 @@
         private System.Windows.Forms.ToolStripMenuItem ControlsSmoothAcceleration;
         private System.Windows.Forms.ToolStripMenuItem ControlsColorSettingsMenu;
         private System.Windows.Forms.ToolStripMenuItem ColorSettingsCustom;
+        private System.Windows.Forms.ToolStripMenuItem[] MathematicalSetMenuItems = new System.Windows.Forms.ToolStripMenuItem[MSVData.MathematicalSets.Count];
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetMenuTSMI;
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetMandelbrot;
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetInverseMandelbrot;
         private System.Windows.Forms.ToolStripMenuItem MathematicalSetJuliaSet;
         private System.Windows.Forms.ToolStripMenuItem ViewMenuTSMI;
         private System.Windows.Forms.ToolStripMenuItem ViewHideMenu;
-        private System.Windows.Forms.ToolStripMenuItem ViewResume;
         private System.Windows.Forms.ToolStripMenuItem ViewHideMenuAndResume;
         private System.Windows.Forms.MenuStrip MainFormMainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem ControlsPause;

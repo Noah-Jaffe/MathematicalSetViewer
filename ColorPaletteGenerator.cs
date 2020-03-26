@@ -6,7 +6,7 @@ namespace MathematicalSetViewer
 {
     public static class ColorPaletteGenerator
     {
-   
+
         /// <summary>
         /// Generates a list of RGB values in rainbow order ending in black.
         /// </summary>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace MathematicalSetViewer
@@ -12,6 +11,7 @@ namespace MathematicalSetViewer
         [STAThread]
         static void Main()
         {
+            MSVData.InitDefaultValues();
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

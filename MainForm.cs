@@ -12,53 +12,82 @@ namespace MathematicalSetViewer
 
     public partial class MainForm : Form
     {
+        // TODO: complete a proper calculations thread
+        Thread CalculationsThread { get; set; }
         Thread ZoomThread { get; set; }
-        private MathematicalSet MathematicalSetGenerator { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
             // This gets the working area (will not include space hidden by taskbar)
-            MSVData.InitDefaultValues();
-            MathematicalSetGenerator = new MathematicalSetTester();
-            /*XY ScreenDim = new XY
-            {
-                X = Convert.ToDecimal(Screen.FromControl(this).Bounds.Width), //10M
-                Y = Convert.ToDecimal(Screen.FromControl(this).Bounds.Height)//10M
-            };
+            UpdateMSVDataMainFormLocation();
+            //StartBackgroundThreads();
+            //MathematicalSetGenerator = new MathematicalSetTester();
 
-            MathematicalSetGenerator.ScreenDimentions = ScreenDim;*/
-            
         }
-        private static XY[] getZoomed(XY botLeft, XY topRight)
+        /*
+        private void StartBackgroundThreads()
         {
+            if (CalculationsThread == null || !CalculationsThread.IsAlive)
+            {
+                // create a new thread
+                CalculationsThread = new Thread(delegate ()
+                {
+                    CalculationsThread(this, MathematicalSetGenerator);
+                })
+                {
+                    IsBackground = true,
+                    Name = "CalculationsThread",
+                    //Priority = maybe?
+                }.Start();
+            }
+        } 
+      
 
-            // if zoom is zero do nothing
-            // if zoom is 0.5, decrease the area by CurrArea*Zoom
-            XY XYMidpoints = new XY
+        private static void CalculationsThread(MainForm mainForm, MathematicalSet mathematicalSetGenerator)
+        {
+            // TODO: improve how the calculations are done. 
+            /*
+             * right now it is done by center or mouse location (idk how accurate the mouse locatior is going to be)
+             * but it should be that a thread runs and generates images 
+             * the images are generated and stiched together and then shown?
+             * /
+            while (true)
             {
-                X = (topRight.X + botLeft.X) / 2M, //((topRight.X - botLeft.X) / 2M) + botLeft.X,
-                Y = (topRight.Y + botLeft.Y) / 2M //((topRight.Y - botLeft.Y) / 2M) + botLeft.Y 
-            };
-            XY rangeZoomedDifference = new XY
-            {
-                X = (topRight.X - botLeft.X) / (MSVData.ZoomSpeed > 0 ? 4M : 0.25M),
-                Y = (topRight.Y - botLeft.Y) / (MSVData.ZoomSpeed > 0 ? 4M : 0.25M)
-            };
-            botLeft.X = XYMidpoints.X - rangeZoomedDifference.X;
-            botLeft.Y = XYMidpoints.Y - rangeZoomedDifference.Y;
-            topRight.X = XYMidpoints.X + rangeZoomedDifference.X;
-            topRight.Y = XYMidpoints.Y + rangeZoomedDifference.Y;
-            return new XY[] { botLeft, topRight };
+                ImageLocation img = (ImageLocation) mathematicalSetGenerator.CalculateRange();
+                MSVData.ImageDB.Add(img);
+            }
         }
+        */
+        /*private static void RunZoomThread(Form mainform, MathematicalSet MathematicalSetGenerator)
+      {
+          Decimal i = 0M;
+          while (MSVData.CalculationsEnabled && MSVData.ZoomSpeed != 0)
+          {
+              Debug.WriteLine(i++);
+              Object map = MathematicalSetGenerator.CalculateRange();
+              if (mainform.BackgroundImage != null)
+                  mainform.BackgroundImage.Dispose();
+              mainform.BackgroundImage = (Bitmap)map;
+              Debug.WriteLine("Sleeping before updating again");
+              Thread.Sleep(50);
+              XY[] t = getZoomed(lowerLeft, upperRight);
+              lowerLeft = t[0];
+              upperRight = t[1];
+          }
+      }
+      */
+
+        // TODO: update to use mouse if needed
+
 
         void SetNewBitmap(Bitmap image)
         {
-            if (this.BackgroundImage != null)
-                this.BackgroundImage.Dispose();
-            this.BackgroundImage = image;
+            if (BackgroundImage != null)
+                BackgroundImage.Dispose();
+            BackgroundImage = image;
         }
-        
+
         /// <summary>
         /// Temp function to keep track of whats to do
         /// </summary>
@@ -78,18 +107,20 @@ namespace MathematicalSetViewer
         public void UpdateMenuBarVisibility(bool isVisible)
         {
             MSVData.MenuVisible = isVisible;
-            this.MainFormMainMenuStrip.Visible = isVisible;
-            this.MinimizeButton.Visible = isVisible;
-            this.ExitButton.Visible = isVisible;
+            MainFormMainMenuStrip.Visible = isVisible;
+            MinimizeButton.Visible = isVisible;
+            ExitButton.Visible = isVisible;
         }
 
         /// <summary>
         /// A toggle for the display movement. 
         /// </summary>
         /// <param name="isEnabled">False to disable display movement, true to enable display movement</param>
-        private void UpdateRenderEnabled(bool isEnabled)
+        private void UpdateCalculationEnabled(bool isEnabled)
         {
             MSVData.RenderEnabled = isEnabled;
+            MSVData.CalculationsEnabled = isEnabled;
+            this.ControlsPause.Checked = isEnabled;
         }
 
         /// <summary>
@@ -98,6 +129,7 @@ namespace MathematicalSetViewer
         /// </summary>
         private void CloseApplication()
         {
+            MSVData.Destroy();
             Debug.Print("Exiting application @ {0}", DateTime.Now.ToString());
             Application.Exit();
         }
@@ -125,8 +157,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void ControlsSmoothAcceleration_CheckedChanged(object sender, EventArgs e)
         {
-            MSVData.SmoothAccelerationEnabled = ((ToolStripMenuItem)sender).Checked; 
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            MSVData.SmoothAccelerationEnabled = ((ToolStripMenuItem)sender).Checked;
         }
 
         /// <summary>
@@ -145,9 +176,9 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ControlsPause_CheckedChanged(object sender, EventArgs e)
+        private void PauseResume_CheckedChanged(object sender, EventArgs e)
         {
-            MSVData.RenderEnabled = ((ToolStripMenuItem)sender).Checked;
+            UpdateCalculationEnabled(((ToolStripMenuItem)sender).Checked);
         }
 
         /// <summary>
@@ -159,7 +190,7 @@ namespace MathematicalSetViewer
         {
             String formTitle = "Custom Zoom Speed";
             String formMessage = "Set the zoom speed.\n>0 := Zoom In\n=0 := No Zoom\n< 0 := Zoom out";
-            using (CustomDecimalInputForm customDecimalInput = new CustomDecimalInputForm(formTitle, formMessage, MSVData.ZoomSpeed, new Decimal[] { -128M, 128M}))
+            using (CustomDecimalInputForm customDecimalInput = new CustomDecimalInputForm(formTitle, formMessage, MSVData.ZoomSpeed, new Decimal[] { -128M, 128M }))
             {
                 customDecimalInput.ShowDialog();
                 Decimal result = MSVData.ZoomSpeed;
@@ -168,8 +199,6 @@ namespace MathematicalSetViewer
                     //MSVData.clearSmoothAccelerationData("ZoomDelta");
                     MSVData.ZoomSpeed = result;
                 }
-
-                // do what ever with result...
             }
         }
 
@@ -181,7 +210,7 @@ namespace MathematicalSetViewer
         private void ColorSettings_CheckedChanged(object sender, EventArgs e)
         {
             // set the sender to checked, and set the other ones to unchecked
-            
+
             Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
         }
 
@@ -192,16 +221,39 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void MathematicalSet_UpdateSet(object sender, EventArgs e)
         {
-            var item = sender as ToolStripMenuItem;
-            // TODO: figure out how to toggle all but the sender in this group
-            foreach (var I in item.DropDownItems.OfType<ToolStripMenuItem>().ToList())
+            var parent = ((ToolStripMenuItem)sender).GetCurrentParent();
+            string name = ((ToolStripMenuItem)sender).Text;
+            short reset = 0;
+            // Keep the sender checked, and set the other ones to unchecked
+            foreach (ToolStripMenuItem I in parent.Items)
             {
-                Debug.Print(I.Name);
+                if (name == I.Text)
+                {
+                    if (!I.Checked)
+                    {
+                        DialogResult dr = MessageBox.Show($"Reset {name}?",
+                            $"Are you sure you want to reset the current calculated {name} render?", MessageBoxButtons.YesNo);
+                        _ = dr == DialogResult.Yes ? reset++ : reset--;
+                    }
+                }
+                I.Checked = name == I.Text;
             }
-            // set the sender to checked, and set the other ones to unchecked
-            Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod());
+            if (reset == 0)
+            {
+                if (MSVData.MathematicalSets.TryGetValue(name, out Type temp))
+                {
+                    MSVData.MathematicalSetGenerator = (MathematicalSet)Activator.CreateInstance(temp);
+                }
+                else
+                {
+                    Debug.Fail($"Err not found: \nName: {name}\nType: {temp}\nPress 'Ignore' to continue");
+                }
+            } else if (reset == 1)
+            {
+                Debug.Print("TODO: " + MethodBase.GetCurrentMethod().ReflectedType.FullName + " ==> " + MethodBase.GetCurrentMethod() + " ==> \nhow to reset the current mathematical set generator without losing data? set it to the default zoom?");
+            } 
         }
-
+        
         /// <summary>
         /// Menu exit button is clicked, double check before calling exiting procedure.
         /// </summary>
@@ -223,7 +275,7 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void MinimizeButton_Click(object sender, System.EventArgs e)
         {
-
+            // TODO:
         }
 
         /// <summary>
@@ -255,7 +307,7 @@ namespace MathematicalSetViewer
         private void ViewHideMenuAndResume_Click(object sender, EventArgs e)
         {
             UpdateMenuBarVisibility(false);
-            UpdateRenderEnabled(true);
+            UpdateCalculationEnabled(true);
             updateText();
         }
 
@@ -270,17 +322,11 @@ namespace MathematicalSetViewer
             {
                 case ' ':
                     // TODO: pause on space
-                    UpdateRenderEnabled(!MSVData.RenderEnabled);
+                    UpdateCalculationEnabled(!MSVData.RenderEnabled);
                     break;
                 case '\u001b':
                     // TODO: unhide menu on escape                    
-                    if (MSVData.MenuVisible)
-                    {
-                        UpdateMenuBarVisibility(false);
-                    } else
-                    {
-                        UpdateMenuBarVisibility(true);
-                    }
+                    UpdateMenuBarVisibility(!MSVData.MenuVisible);
                     break;
 
             }
@@ -346,7 +392,6 @@ namespace MathematicalSetViewer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-
         private void MainForm_MouseWheel(object sender, MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -359,29 +404,25 @@ namespace MathematicalSetViewer
                 // Mouse wheel down
                 MSVData.ZoomSpeed -= 1;
             }
-            if ((ZoomThread == null || !ZoomThread.IsAlive) && MSVData.ZoomSpeed != 0) {
-                ZoomThread = new Thread(delegate ()
-                {
-                    RunZoomThread(this, MathematicalSetGenerator);
-                })
-                {
-                    IsBackground = true,
-                    Name = "ZoomThread"
-                };
-            } 
-            if (!ZoomThread.IsAlive && MSVData.ZoomSpeed != 0)
-            {
-                ZoomThread.Start();
-            } else if (ZoomThread.IsAlive && MSVData.ZoomSpeed == 0)
-            {
-                // do we kill the thread here?
-            }
+
             updateText();
         }
 
+        private void UpdateMSVDataMainFormLocation()
+        {
+            // TODO: look into optimization for something like this
+            // asmV1: (Point P var) put p on stack, access stack each P.?
+            // asmV2: (this.PointToClient each .? call) put p in register, access register each P.?
+            Point P = PointToClient(System.Windows.Forms.Cursor.Position);
+            MSVData.MainFormLocationPoint = new XY
+            {
+                X = P.X,
+                Y = P.Y
+            };
+        }
         private void updateText()
         {
-            Point p = this.PointToClient(System.Windows.Forms.Cursor.Position);
+            Point p = PointToClient(System.Windows.Forms.Cursor.Position);
             Point c = Cursor.Position;
             Debug.Print(string.Format("<{0,4},{1,4}>|<{2,4},{3,4}> {4}{5}{6}{7} {8}{9} {10,3}",
                 p.X.ToString(), p.Y.ToString(),
@@ -396,12 +437,23 @@ namespace MathematicalSetViewer
 
         }
 
+        // TODO: figure out how im changing colors n whatnot
         private void ControlsColorSettingChanged(object sender, EventArgs e)
         {
-            switch(this.ColorSettingOptions.SelectedIndex)
+            Debug.Print($"Updating color palette... {ColorSettingOptions.SelectedItem}");
+
+
+            Debug.Print(ColorSettingOptions.SelectedItem.ToString());
+        }
+
+        // TODO if sender is ToolStripComboBox vs ToolStripMenuItem
+
+        private void UpdateColorPalette(object sender, EventArgs e)
+        {
+            // TODO if sender is ToolStripComboBox vs ToolStripMenuItem
+            switch (ColorSettingOptions.SelectedItem)
             {
                 case 0:
-                    Debug.Print("Generating full colors...");
                     MSVData.ColorPalette = ColorPaletteGenerator.GenerateIterationColors();
                     break;
                 case 1:
@@ -413,30 +465,28 @@ namespace MathematicalSetViewer
                 default:
                     throw new NotImplementedException();
             }
-            Debug.Print(this.ColorSettingOptions.SelectedItem.ToString());
         }
 
-
-        private static void RunZoomThread(Form mainform, MathematicalSet MathematicalSetGenerator)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            XY lowerLeft = MathematicalSetGenerator.DefaultBotLeft;
-            XY upperRight = MathematicalSetGenerator.DefaultTopRight;
-            Decimal i = 0M;
-            while (MSVData.CalculationsEnabled && MSVData.ZoomSpeed != 0)
+            // Load the mathematical sets into the menu
+            var keys = MSVData.MathematicalSets.Keys;
+            var I = 0;
+            foreach (var i in keys)
             {
-                Debug.WriteLine(i++);
-                Object map = MathematicalSetGenerator.CalculateRange(lowerLeft, upperRight);
-                if (mainform.BackgroundImage != null)
-                    mainform.BackgroundImage.Dispose();
-                mainform.BackgroundImage = (Bitmap)map;
-                Debug.WriteLine("Sleeping before updating again");
-                Thread.Sleep(50);
-                XY[] t = getZoomed(lowerLeft, upperRight);
-                lowerLeft = t[0];
-                upperRight = t[1];
-            }
-        }
+                ToolStripMenuItem temp = new ToolStripMenuItem()
+                {
+                    Name = i,
+                    AutoSize = true,
+                    Text = i,
+                    CheckOnClick = true
+                };
+                temp.Click += new System.EventHandler(this.MathematicalSet_UpdateSet);
+                this.MathematicalSetMenuItems[I++] = temp;
+            };
+            this.MathematicalSetMenuTSMI.DropDownItems.AddRange(this.MathematicalSetMenuItems);
 
+        }
     }
 
 }

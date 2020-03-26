@@ -17,11 +17,11 @@ namespace MathematicalSetViewer
 
         public CustomDecimalInputForm(String title, String message, Decimal startingVal = 0M, Decimal[] range = null)
         {
-            this.Completed = false;
-            this.StartingVal = startingVal;
-            this.Range = range;
-            this.Text = title;
-            this.Message = message;
+            Completed = false;
+            StartingVal = startingVal;
+            Range = range;
+            Text = title;
+            Message = message;
             InitializeComponent();
         }
 
@@ -32,9 +32,9 @@ namespace MathematicalSetViewer
         /// <param name="e"></param>
         private void CDIF_Send(object sender, EventArgs e)
         {
-            Result = this.numericUpDown.Value;
-            this.Completed = true;
-            this.Close();
+            Result = numericUpDown.Value;
+            Completed = true;
+            Close();
         }
 
         /// <summary>
@@ -45,22 +45,23 @@ namespace MathematicalSetViewer
         private void CDIF_Cancel(object sender, EventArgs e)
         {
             Result = StartingVal;
-            this.Completed = true;
-            this.Close();
+            Completed = true;
+            Close();
         }
 
         private void CDIF_Load(object sender, EventArgs e)
         {
-            this.numericUpDown.Value = this.StartingVal;
+            numericUpDown.Value = StartingVal;
             try
             {
                 // Attempt to set the min
-                this.numericUpDown.Minimum = this.Range[0];
+                numericUpDown.Minimum = Range[0];
                 // Attempt to set the max
-                this.numericUpDown.Maximum = this.Range[1];
-            } finally { }; // Do nothing if it fails.
+                numericUpDown.Maximum = Range[1];
+            }
+            finally { }; // Do nothing if it fails.
 
-            this.messageArea.Text = this.Message;
+            messageArea.Text = Message;
         }
     }
 }

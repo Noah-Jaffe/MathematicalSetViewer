@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.CSharp;
 namespace MathematicalSetViewer
 {
     public class LinkedList
@@ -7,7 +6,7 @@ namespace MathematicalSetViewer
         internal LinkedListNode head;
         public int Count { get; private set; }
         public decimal TotalNumericVal { get; private set; }
-        
+
         public LinkedList()
         {
         }
@@ -37,7 +36,7 @@ namespace MathematicalSetViewer
                 newNode.next = newNode;
                 newNode.prev = newNode;
                 head = newNode;
-                
+
             }
             else
             {
@@ -48,7 +47,7 @@ namespace MathematicalSetViewer
                 head.prev = newNode;
             }
             TotalNumericVal += value;
-            
+
             ++Count;
         }
 
@@ -73,7 +72,7 @@ namespace MathematicalSetViewer
             if (head == null)
             {
                 return 0M;
-            } 
+            }
             else if (head.next == head)
             {
                 Decimal popped = head.Value;
@@ -82,11 +81,11 @@ namespace MathematicalSetViewer
                 --Count;
                 TotalNumericVal -= popped;
                 return popped;
-                
-            } 
-            else 
+
+            }
+            else
             {
-                
+
                 // Remove item from the front of the list and ensure the circular list is still intact
                 LinkedListNode newHead = head.next;
                 Decimal popped = head.Value;
@@ -116,7 +115,7 @@ namespace MathematicalSetViewer
             TotalNumericVal = 0;
             return ttl;
         }
-                
+
     }
 
     public sealed class LinkedListNode
@@ -128,13 +127,13 @@ namespace MathematicalSetViewer
 
         public LinkedListNode(Decimal value)
         {
-            this.item = value;
+            item = value;
         }
 
         internal LinkedListNode(LinkedList list, Decimal value)
         {
             this.list = list;
-            this.item = value;
+            item = value;
         }
 
         public LinkedList List

@@ -65,10 +65,15 @@
     <Compile Include="CustomDecimalInputForm.Designer.cs">
       <DependentUpon>CustomDecimalInputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageLocation.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="MandelbrotGenerator.cs" />
     <Compile Include="MathematicalSetTester.cs" />
     <Compile Include="MSVData.cs" />
+    <Compile Include="SafeQuadTree\BBox.cs" />
+    <Compile Include="SafeQuadTree\BBoxPt.cs" />
+    <Compile Include="SafeQuadTree\SQTNode.cs" />
+    <Compile Include="SafeQuadTree\SQTPoint.cs" />
     <Compile Include="XY.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
